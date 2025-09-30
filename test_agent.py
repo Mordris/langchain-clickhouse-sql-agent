@@ -9,7 +9,7 @@ from langchain_community.agent_toolkits.sql.toolkit import SQLDatabaseToolkit
 load_dotenv()
 print("--- Starting LangChain ClickHouse Test ---")
 
-# --- 1. CONFIGURATION (NOW FULLY DYNAMIC) ---
+# --- 1. CONFIGURATION ---
 # Load all database credentials from environment variables
 db_user = os.getenv("CLICKHOUSE_USER", "default")
 db_password = os.getenv("CLICKHOUSE_PASSWORD", "learn_password")
