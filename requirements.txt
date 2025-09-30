@@ -1,0 +1,7 @@
+# clickhouse-playground/requirements.txt
+langchain
+langchain-openai
+langchain-community
+clickhouse-sqlalchemy
+sqlalchemy
+python-dotenv
