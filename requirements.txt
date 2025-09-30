@@ -1,4 +1,4 @@
-# clickhouse-playground/requirements.txt
+# requirements.txt
 langchain
 langchain-openai
 langchain-community

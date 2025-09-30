@@ -1,4 +1,4 @@
-# clickhouse-playground/docker-compose.yml
+# docker-compose.yml
 services:
   clickhouse-server:
     image: clickhouse/clickhouse-server:latest
@@ -6,8 +6,11 @@ services:
     ports:
       - "8123:8123"
       - "9000:9000"
+    # The environment variables are dynamically loaded from the .env file
     environment:
-      - CLICKHOUSE_PASSWORD=learn_password
+      - CLICKHOUSE_USER=${CLICKHOUSE_USER}
+      - CLICKHOUSE_PASSWORD=${CLICKHOUSE_PASSWORD}
+      - CLICKHOUSE_DB=${CLICKHOUSE_DB}
     volumes:
       - clickhouse-data:/var/lib/clickhouse/
     ulimits:
@@ -15,19 +18,15 @@ services:
         soft: 262144
         hard: 262144
 
-  # --- ADD THIS NEW SERVICE ---
   langchain-test-app:
     build:
-      context: . # Build from the current directory
-      dockerfile: Dockerfile.test # We will create this file next
+      context: .
+      dockerfile: Dockerfile.test
     container_name: langchain-test
     env_file:
       - .env
-    # This is no longer needed as they are in the same file and network by default
-    # networks: ...
     depends_on:
-      - clickhouse-server # Wait for ClickHouse to start
-# --- END OF NEW SERVICE ---
+      - clickhouse-server
 
 volumes:
   clickhouse-data:
