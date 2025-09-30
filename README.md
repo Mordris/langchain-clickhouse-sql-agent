@@ -1,15 +1,16 @@
-# LangChain & ClickHouse: A Text-to-SQL Agent Boilerplate
+# LangChain & ClickHouse: A Fully-Configurable Text-to-SQL Agent
 
 This repository provides a complete, self-contained, and interactive demonstration of a powerful Text-to-SQL agent built with Python, LangChain, and ClickHouse. It is designed to serve as a proof-of-concept and a starting point for integrating natural language database queries into your applications.
 
-The entire environment is containerized with Docker, allowing for a one-command setup and ensuring perfect reproducibility.
+The entire environment is containerized with Docker and is fully configurable via environment variables, ensuring perfect reproducibility and easy adaptation.
 
 ## ✨ Features
 
-- **Natural Language to SQL:** Ask complex questions in plain English.
-- **Intelligent Reasoning:** The agent inspects the database schema to understand table relationships and construct `JOIN` queries.
+- **Natural Language to SQL:** Ask complex questions about your data in plain English.
+- **Intelligent Reasoning:** The agent inspects the database schema to understand table relationships and automatically construct `JOIN` queries.
 - **ClickHouse Integration:** Demonstrates a direct connection to a high-performance ClickHouse analytical database.
-- **Dockerized Environment:** All services (ClickHouse & the Python app) are defined in a single `docker-compose.yml` for easy setup.
+- **Fully Dockerized:** All services (ClickHouse & the Python app) are defined in a single `docker-compose.yml` for a one-command setup.
+- **Configuration-Driven:** All settings (API keys, database credentials) are managed via a `.env` file, with no hardcoded values.
 - **Interactive Demo:** The final script runs in an interactive loop, perfect for live demonstrations.
 - **Verbose Output:** See the agent's entire thought process, from analyzing the schema to generating and executing the final SQL query.
 
@@ -61,19 +62,29 @@ sequenceDiagram
     cd langchain-clickhouse-sql-agent
     ```
 
-2.  **Create the environment file:**
-    Create a file named `.env` in the project root to store your secret key.
+2.  **Create your environment file from the template:**
+    Copy the example file to create your own local configuration.
+
+    ```bash
+    cp .env.example .env
+    ```
+
+3.  **Edit the `.env` file:**
+    Open the newly created `.env` file and add your secret OpenAI API key. You can leave the `CLICKHOUSE` variables as they are for this demo.
     ```
     # .env
-    OPENAI_API_KEY=sk-YourSecretOpenAIKeyGoesHere
+    OPENAI_API_KEY="sk-YourSecretOpenAIKeyGoesHere"
+    CLICKHOUSE_DB="e_commerce_analytics"
+    CLICKHOUSE_USER="default"
+    CLICKHOUSE_PASSWORD="learn_password"
     ```
 
 ### Step 2: Set Up the ClickHouse Database
 
-Before running the agent, you must start the ClickHouse server and populate it with the test data.
+Before running the agent, you must start the ClickHouse server and populate it with the test data. This process is fully automated by the configuration you just set.
 
 1.  **Start the ClickHouse Server:**
-    This command will start the database container in the background.
+    This command will start the database container in the background, automatically creating the `e_commerce_analytics` database with the specified user and password.
 
     ```bash
     docker-compose up -d clickhouse-server
@@ -90,12 +101,6 @@ Before running the agent, you must start the ClickHouse server and populate it w
 
 3.  **Run the Setup SQL Commands:**
     Paste each of the following SQL blocks into the client one by one and press Enter.
-
-    - **Create the database:**
-
-      ```sql
-      CREATE DATABASE e_commerce_analytics;
-      ```
 
     - **Create the `customers` table:**
 
